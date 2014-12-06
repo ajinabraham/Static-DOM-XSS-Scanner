@@ -17,30 +17,35 @@ def DOMAnalyzer(path):
         for jfile in files:
             jfile_path=os.path.join(path,dirName,jfile)
             if jfile.endswith('.js') or jfile.endswith('.html'):
-                with open(jfile_path,'r') as f:
-                    dat=f.read()
-                thd="<tr><td>"+jfile+"</br>["+jfile_path+"]</td>"
-                source=""
-                sink=""
-                for k, line in enumerate(dat.split("\n")):
-                    for pattern in re.finditer(SOURCES_RE, line):
-                        for grp in pattern.groups():
-                            if grp is None: continue
-                            if (("[Line: "+str(k+1)+"]" in source) and (grp in source)):
-                                pass
-                            else:
-                                source+="[Line: "+ str(k+1) +"] - "+ grp +"</br>"
-                           
-                    for pattern in re.finditer(SINKS_RE, line):
-                        for grp in pattern.groups():
-                            if grp is None: continue
-                            if (("[Line: "+str(k+1)+"]" in sink) and (grp in sink)):
-                                pass
-                            else:
-                                sink+="[Line: "+ str(k+1) +"] - "+ grp +"</br>"
-                            
-                if (len(source) > 2 or len(sink)>2):
-                    DATA+=thd+"<td>"+source+"</td><td>"+sink+"</td></tr>"
+                try:
+                
+                    with open(jfile_path,'r') as f:
+                        dat=f.read()
+                    thd="<tr><td>"+jfile+"</br>["+jfile_path+"]</td>"
+                    source=""
+                    sink=""
+                    for k, line in enumerate(dat.split("\n")):
+                        for pattern in re.finditer(SOURCES_RE, line):
+                            for grp in pattern.groups():
+                                if grp is None: continue
+                                if (("[Line: "+str(k+1)+"]" in source) and (grp in source)):
+                                    pass
+                                else:
+                                    source+="[Line: "+ str(k+1) +"] - "+ grp +"</br>"
+                               
+                        for pattern in re.finditer(SINKS_RE, line):
+                            for grp in pattern.groups():
+                                if grp is None: continue
+                                if (("[Line: "+str(k+1)+"]" in sink) and (grp in sink)):
+                                    pass
+                                else:
+                                    sink+="[Line: "+ str(k+1) +"] - "+ grp +"</br>"
+                                
+                    if (len(source) > 2 or len(sink)>2):
+                        DATA+=thd+"<td>"+source+"</td><td>"+sink+"</td></tr>"
+                except:
+                    pass
+
     return DATA
                             
 def Report(data):
